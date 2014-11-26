@@ -1,0 +1,32 @@
+set -e
+
+SPARK_START="sh /opt/spark-1.1.0/sbin/start-master.sh --ip spark-master"
+SPARK_STOP="sh /opt/spark-1.1.0/sbin/stop-master.sh"
+
+OPTIONS=""
+MODULES=""
+
+# Get lsb functions
+. /lib/lsb/init-functions
+
+case "$1" in
+  start)
+    log_begin_msg "Starting Spark..."
+    $SPARK_START
+    log_end_msg $?
+    ;;
+  stop)
+    log_begin_msg "Stopping Spark..."
+    $SPARK_STOP
+    log_end_msg $?
+    ;;
+  restart)
+    $0 stop
+    sleep 1
+    $0 start
+    ;;
+  *)
+    log_success_msg "Usage: /etc/init.d/spark-master {start|stop|restart}"
+    exit 1
+esac
+
